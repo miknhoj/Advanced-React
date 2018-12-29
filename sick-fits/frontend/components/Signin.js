@@ -3,14 +3,11 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import Form from "./styles/Form";
 import Error from "./ErrorMessage";
-import { CURRENT_USER_QUERY } from './User'
+import { CURRENT_USER_QUERY } from "./User";
 
 const SIGNIN_MUTATION = gql`
-  mutation SIGNIN_MUTATION(
-    $email: String!
-    $password: String!
-  ) {
-    signup(email: $email, name: $name, password: $password) {
+  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
       id
       email
       name
@@ -20,9 +17,9 @@ const SIGNIN_MUTATION = gql`
 
 export default class Signin extends Component {
   state = {
-    name: "",
-    password: "",
-    email: ""
+    name: '',
+    password: '',
+    email: '',
   };
 
   saveToState = e => {
@@ -31,20 +28,18 @@ export default class Signin extends Component {
 
   render() {
     return (
-      <Mutation 
-        mutation={SIGNIN_MUTATION} 
+      <Mutation
+        mutation={SIGNIN_MUTATION}
         variables={this.state}
-        refetchQueries={[{query: CURRENT_USER_QUERY}]}
-        >
-       
-        {(signup, { error, loading }) => {
-          return (
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
+        {(signup, { error, loading }) => (
             <Form
               method="post"
               onSubmit={async e => {
                 e.preventDefault();
                 await signup();
-                this.setState({name: '', email:'', password:''})
+                this.setState({ name: "", email: "", password: "" });
               }}
             >
               <fieldset disabled={loading} aria-busy={loading}>
@@ -73,8 +68,7 @@ export default class Signin extends Component {
                 <button type="submit">Sign In</button>
               </fieldset>
             </Form>
-          );
-        }}
+        )}
       </Mutation>
     );
   }
